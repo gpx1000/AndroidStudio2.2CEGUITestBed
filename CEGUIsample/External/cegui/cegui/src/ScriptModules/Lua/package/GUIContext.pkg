@@ -1,0 +1,42 @@
+class GUIContextEventArgs : public EventArgs
+{
+public:
+    GUIContextEventArgs(GUIContext* context);
+    GUIContext* context;
+};
+
+class GUIContext : public RenderingSurface
+{
+    Window* getRootWindow() const;
+    void setRootWindow(Window* new_root);
+
+    //void setModalWindow(Window* window);
+    Window* getModalWindow() const;
+
+    Window* getWindowContainingCursor() const;
+
+    const Size<float>& getSurfaceSize() const;
+
+    void markAsDirty();
+    bool isDirty() const;
+
+    Cursor& getCursor();
+    //const Cursor& getCursor() const;
+
+    //void setInputCaptureWindow(Window* window);
+    Window* getInputCaptureWindow() const;
+
+    void setDefaultTooltipObject(Tooltip* tooltip);
+    void setDefaultTooltipType(utf8string tooltip_type);
+
+    Tooltip* getDefaultTooltipObject() const;
+
+    void setDefaultFont(utf8string name);
+    void setDefaultFont(Font* font);
+    Font* getDefaultFont(void) const;
+
+    bool injectTimePulse(float timeElapsed);
+    bool injectInputEvent(const CEGUI::InputEvent& event);
+    bool injectUndoRequest();
+    bool injectRedoRequest();
+};

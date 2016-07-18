@@ -1,0 +1,57 @@
+apply plugin: 'com.android.model.library'
+
+model {
+    android {
+        compileSdkVersion = rootProject.ext.compileSdkVersion
+        buildToolsVersion = rootProject.ext.buildToolsVersion
+
+        defaultConfig.with {
+            minSdkVersion.apiLevel = rootProject.ext.minSdkVersion
+            targetSdkVersion.apiLevel = rootProject.ext.targetSdkVersion
+            versionCode = rootProject.ext.versionCode
+            versionName = rootProject.ext.versionName
+        }
+    }
+    android.ndk {
+        moduleName "pcre"
+        CFlags.addAll(["-DHAVE_CONFIG_H", "-fPIC"])
+        CFlags.add("-DHAVE_ZLIB_H")
+        CFlags.add("-DHAVE_STDINT_H=0")
+        CFlags.add("-DSUPPORT_UTF8")
+        CFlags.add("-DPCRE_STATIC")
+        CFlags.add("-DHAVE_INTTYPES_H=0")
+        CFlags.add("-Wno-error=format-security")
+        cppFlags.addAll(CFlags)
+        stl "gnustl_shared"
+        abiFilters.add("armeabi-v7a")
+        platformVersion rootProject.ext.platformVersion
+    }
+
+    android.sources.main{
+        jni {
+            source {
+                exclude "**/*demo*"
+                exclude "**/*.cc"
+                exclude "**/*test*"
+                exclude "**/dftables.c"
+                srcDirs = [
+                        '../../External/pcre-8.12/'
+                ]
+            }
+            exportedHeaders {
+                srcDirs = [
+                        '../../External/pcre-8.12/'
+                ]
+            }
+        }
+        jniLibs {
+            source {
+                srcDirs.add('src/main/libs')
+            }
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+}

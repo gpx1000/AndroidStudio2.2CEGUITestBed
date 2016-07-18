@@ -1,0 +1,25 @@
+/***********************************************************************
+	ListWidget
+***********************************************************************/
+class ListWidget : public Window
+{
+	unsigned long getItemCount() const;
+	unsigned long getSelectedItemsCount();
+	CEGUI::StandardItem* getFirstSelectedItem();
+	CEGUI::StandardItem* getNextSelectedItem(const CEGUI::StandardItem* start_item);
+	CEGUI::StandardItem* getItemAtIndex(unsigned long index);
+	CEGUI::StandardItem* findItemWithText(utf8string text, const CEGUI::StandardItem* start_item);
+	bool isIndexSelected(unsigned long index);
+	bool isItemSelected(const CEGUI::StandardItem* item);
+	bool isItemInList(const CEGUI::StandardItem* item);
+
+	void clearList(void);
+	void addItem(CEGUI::StandardItem* item);
+	void insertItem(CEGUI::StandardItem* item, const CEGUI::StandardItem* position);
+	void removeItem(const CEGUI::StandardItem* item);
+	void setIndexSelectionState(CEGUI::StandardItem* item, bool state);
+	void setIndexSelectionState(unsigned long item_index, bool state);
+
+	Scrollbar* getVertScrollbar() const;
+	Scrollbar* getHorzScrollbar() const;
+};

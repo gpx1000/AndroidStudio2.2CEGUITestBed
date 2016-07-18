@@ -1,0 +1,148 @@
+apply plugin: 'com.android.model.library'
+
+model {
+    repositories {
+        libs(PrebuiltLibraries) {
+            iconvLib {
+                binaries.withType(StaticLibraryBinary) {
+                    staticLibraryFile = file("../../External/cegui/libs/${targetPlatform.getName()}/libiconv.a")
+                }
+            }
+            nativeAppGlue {
+                binaries.withType(StaticLibraryBinary) {
+                    staticLibraryFile = file("../../External/cegui/libs/${targetPlatform.getName()}/libandroid_native_app_glue.a")
+                }
+            }
+            ceguiBase {
+                headers.srcDirs =
+                        [
+                            "../cegui/externalNativeBuild/cmake/release/armeabi-v7a/cegui/include",
+                            "../../External/cegui/cegui/include",
+                            "${rootProject.ext.ndkDir}/sources/android/native_app_glue"
+                        ]
+                binaries.withType(StaticLibraryBinary) {
+                    staticLibraryFile = file("../cegui/build/intermediates/cmake/release/lib/${targetPlatform.getName()}/libCEGUIBase-9999_Static.a")
+                }
+            }
+            ceguiCommonDialogs {
+                binaries.withType(StaticLibraryBinary) {
+                    staticLibraryFile = file("../cegui/build/intermediates/cmake/release/lib/${targetPlatform.getName()}/libCEGUICommonDialogs-9999_Static.a")
+                }
+            }
+            ceguiCoreRendererSet {
+                binaries.withType(StaticLibraryBinary) {
+                    staticLibraryFile = file("../cegui/build/intermediates/cmake/release/lib/${targetPlatform.getName()}/libCEGUICoreWindowRendererSet_Static.a")
+                }
+            }
+            ceguiFreeimageCodec {
+                binaries.withType(StaticLibraryBinary) {
+                    staticLibraryFile = file("../cegui/build/intermediates/cmake/release/lib/${targetPlatform.getName()}/libCEGUIFreeImageImageCodec_Static.a")
+                }
+            }
+            ceguiLua {
+                binaries.withType(StaticLibraryBinary) {
+                    staticLibraryFile = file("../cegui/build/intermediates/cmake/release/lib/${targetPlatform.getName()}/libCEGUILuaScriptModule-9999_Static.a")
+                }
+            }
+            ceguiOpengl {
+                binaries.withType(StaticLibraryBinary) {
+                    staticLibraryFile = file("../cegui/build/intermediates/cmake/release/lib/${targetPlatform.getName()}/libCEGUIOpenGLRenderer-9999_Static.a")
+                }
+            }
+            ceguiTinyxml {
+                binaries.withType(StaticLibraryBinary) {
+                    staticLibraryFile = file("../cegui/build/intermediates/cmake/release/lib/${targetPlatform.getName()}/libCEGUITinyXMLParser_Static.a")
+                }
+            }
+        }
+    }
+    android {
+        compileSdkVersion rootProject.ext.compileSdkVersion
+        buildToolsVersion rootProject.ext.buildToolsVersion
+
+        defaultConfig.with {
+            minSdkVersion.apiLevel = rootProject.ext.minSdkVersion
+            targetSdkVersion.apiLevel = rootProject.ext.targetSdkVersion
+            versionCode = rootProject.ext.versionCode
+            versionName = rootProject.ext.versionName
+        }
+
+        ndk {
+            moduleName "native-lib"
+            toolchain "clang"
+            stl "gnustl_shared"
+            CFlags.add("-fexceptions")
+            CFlags.add("-Wall")
+            CFlags.add("-Werror")
+            CFlags.add("-Wno-unused-function")
+            CFlags.add("-Wno-overloaded-virtual")
+            CFlags.add("-DVERSION=\"ver-${getRootProject().getVersion().toString()}\"".toString())
+            cppFlags.addAll(CFlags)
+            cppFlags.add("-frtti")
+            ldLibs.add("log")
+            ldLibs.add("z")
+            ldLibs.add("m")
+            ldLibs.add("GLESv3")
+            ldLibs.add("EGL")
+            ldLibs.add("android")
+            abiFilters.add("armeabi-v7a")
+        }
+
+        buildTypes {
+            release {
+                minifyEnabled false
+                proguardFiles.add(file("proguard-rules.pro"))
+                ndk {
+                    CFlags.add("-O3")
+                    cppFlags.add("-O3")
+                    cppFlags.add("-mhard-float")
+                    cppFlags.add("-mfloat-abi=softfp")
+                    cppFlags.add("-mfpu=neon")
+                    CFlags.add("-D_NDK_MATH_NO_SOFTFP=1")
+                    cppFlags.add("-D_NDK_MATH_NO_SOFTFP=1")
+                }
+            }
+            debug {
+                ndk {
+                    CFlags.add("-g")
+                    cppFlags.add("-g")
+                }
+            }
+        }
+    }
+
+    // This source set represents everything shared by all library variants
+    android.sources.main.jni {
+        source {
+            exclude "**/External/*"
+
+            srcDirs = ['src/main/cpp']
+        }
+        dependencies {
+//            project ":cegui" linkage "static" //this is what the bug 213870 was. solution was to move to the gradle dependencies below
+            project ":freetype" linkage "shared"
+            project ":freeimage" linkage "shared"
+            project ":pcre" linkage "shared"
+            project ":tinyxml" linkage "shared"
+            project ":toluapp" linkage "shared"
+            project ":lua" linkage "shared"
+            library "iconvLib" linkage "static"
+            library "nativeAppGlue" linkage "static"
+            library "ceguiBase" linkage "static"
+            library "ceguiCommonDialogs" linkage "static"
+            library "ceguiCoreRendererSet" linkage "static"
+            library "ceguiFreeimageCodec" linkage "static"
+            library "ceguiLua" linkage "static"
+            library "ceguiOpengl" linkage "static"
+            library "ceguiTinyxml" linkage "static"
+        }
+    }
+
+    android.lintOptions {
+        abortOnError false
+    }
+}
+
+dependencies {
+    compile project(path: ':cegui')
+}

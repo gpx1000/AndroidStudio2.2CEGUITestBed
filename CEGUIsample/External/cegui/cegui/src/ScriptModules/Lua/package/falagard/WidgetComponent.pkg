@@ -1,0 +1,33 @@
+/******************************************************************************
+  WidgetComponent
+******************************************************************************/
+
+class WidgetComponent
+{
+  void create(Window& parent) const;
+  const ComponentArea& getComponentArea() const;
+  void setComponentArea(const ComponentArea& area);
+  string getTargetType() const;
+  void setTargetType(utf8string type);
+  string getWidgetName() const;
+  void setWidgetName(utf8string suffix);
+  string getWindowRendererType() const;
+  void setWindowRendererType(utf8string type);
+  VerticalAlignment getVerticalWidgetAlignment() const;
+  void setVerticalWidgetAlignment(VerticalAlignment alignment);
+  HorizontalAlignment getHorizontalWidgetAlignment() const;
+  void setHorizontalWidgetAlignment(HorizontalAlignment alignment);
+  void addPropertyInitialiser(const PropertyInitialiser& initialiser);
+  void clearPropertyInitialisers();
+  void setAutoWindow(bool is_auto);
+  bool isAutoWindow() const;
+  void layout(const Window& owner) const;
+
+  //void writeXMLToStream(OutStream& out_stream) const;
+
+  const PropertyInitialiser* findPropertyInitialiser(utf8string propertyName) const;
+
+  WidgetComponent();
+  WidgetComponent(utf8string type, utf8string suffix, utf8string renderer, bool autoWindow);
+};
+

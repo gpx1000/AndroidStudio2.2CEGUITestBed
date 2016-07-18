@@ -1,0 +1,107 @@
+apply plugin: 'com.android.model.library'
+
+model {
+    android {
+        compileSdkVersion = rootProject.ext.compileSdkVersion
+        buildToolsVersion = rootProject.ext.buildToolsVersion
+
+        defaultConfig.with {
+            minSdkVersion.apiLevel = rootProject.ext.minSdkVersion
+            targetSdkVersion.apiLevel = rootProject.ext.targetSdkVersion
+            versionCode = rootProject.ext.versionCode
+            versionName = rootProject.ext.versionName
+        }
+
+    }
+    android.ndk {
+        moduleName "freeimage"
+        CFlags.addAll(["-DFREEIMAGE_LIB=1", "-DPNG_STATIC=1", "-DSTDC_HEADERS=1", "-Wno-error=format-security"])
+        CFlags.add("-I../../External/android-lib-freeimage/FreeImage/Source/")
+        CFlags.add("-I../../External/android-lib-freeimage/FreeImage/Source/Metadata")
+        CFlags.add("-I../../External/android-lib-freeimage/FreeImage/Source/DeprecationManager")
+        CFlags.add("-I../../External/android-lib-freeimage/FreeImage/Source/OpenEXR")
+        CFlags.add("-I../../External/android-lib-freeimage/FreeImage/Source/OpenEXR/IlmImf")
+        CFlags.add("-I../../External/android-lib-freeimage/FreeImage/Source/OpenEXR/Imath")
+        CFlags.add("-I../../External/android-lib-freeimage/FreeImage/Source/OpenEXR/Iex")
+        CFlags.add("-I../../External/android-lib-freeimage/FreeImage/Source/OpenEXR/Half")
+        CFlags.add("-I../../External/android-lib-freeimage/FreeImage/Source/OpenEXR/IlmThread")
+        CFlags.add("-I../../External/android-lib-freeimage/FreeImage/Source/LibRawLite")
+        CFlags.add("-I../../External/android-lib-freeimage/missing")
+        cppFlags.addAll(CFlags)
+        cppFlags.add("-fexceptions")
+        cppFlags.add("-frtti")
+        ldLibs.add("z")
+        stl "gnustl_shared"
+        abiFilters.add("armeabi-v7a")
+        platformVersion rootProject.ext.platformVersion
+    }
+
+    android.sources.main{
+        jni {
+            source {
+                exclude "**/jmemdos.c"
+                exclude "**/jmemdosa.c"
+                exclude "**/jmemmac.c"
+                exclude "**/pngvalid.c"
+                exclude "**/tif_vms.c"
+                exclude "**/tif_win32.c"
+                exclude "**/tif_wince.c"
+                exclude "**/IlmThreadWin32.*"
+                exclude "**/IlmThreadMutexWin32.*"
+                exclude "**/IlmThreadSemaphoreWin32.*"
+                exclude "**/dcb_demosaicing.c"
+                exclude "**/mkg3states.*"
+                exclude "**/rdjpgcom.*"
+                exclude "**/wrjpgcom.*"
+                exclude "**/t1_generate_luts.*"
+                exclude "**/djpeg.*"
+                exclude "**/cjpeg.*"
+                exclude "**/ckconfig.*"
+                exclude "**/pngtest.*"
+                exclude "**/jpegtran.*"
+                exclude "**/ansi2knr.*"
+                exclude "**/eLut.*"
+                exclude "**/toFloat.*"
+                exclude "**/b44ExpLogTable.*"
+                exclude "**/tif_unix.*"
+                exclude "**/jmemname.c"
+                exclude "**/jmemansi*"
+                exclude "**/example*"
+                srcDirs = [
+                        '../../External/android-lib-freeimage/FreeImage/Source/LibJPEG/',
+                        '../../External/android-lib-freeimage/FreeImage/Source/LibPNG/',
+                        '../../External/android-lib-freeimage/FreeImage/Source/FreeImage/',
+                        '../../External/android-lib-freeimage/FreeImage/Source/Metadata',
+                        '../../External/android-lib-freeimage/FreeImage/Source/DeprecationManager/',
+                        '../../External/android-lib-freeimage/FreeImage/Source/OpenEXR/IlmImf/',
+                        '../../External/android-lib-freeimage/FreeImage/Source/OpenEXR/Imath/',
+                        '../../External/android-lib-freeimage/FreeImage/Source/OpenEXR/Iex/',
+                        '../../External/android-lib-freeimage/FreeImage/Source/OpenEXR/Half/',
+                        '../../External/android-lib-freeimage/FreeImage/Source/OpenEXR/IlmThread/',
+                        '../../External/android-lib-freeimage/FreeImage/Source/LibTIFF4/',
+                        '../../External/android-lib-freeimage/FreeImage/Source/LibOpenJPEG/',
+                        '../../External/android-lib-freeimage/FreeImage/Source/LibRawLite/libraw/',
+                        '../../External/android-lib-freeimage/FreeImage/Source/LibRawLite/internal/',
+                        '../../External/android-lib-freeimage/FreeImage/Source/LibRawLite/src/',
+                        '../../External/android-lib-freeimage/FreeImage/Source/FreeImageToolkit/',
+                        '../../External/android-lib-freeimage/missing/',
+                ]
+            }
+            exportedHeaders {
+                srcDirs = [
+                        "../../External/android-lib-freeimage/FreeImage/Source",
+                        "../../External/android-lib-freeimage/FreeImage/Source/Metadata",
+                        "../../External/android-lib-freeimage/FreeImage/Source/DeprecationManager",
+                        "../../External/android-lib-freeimage/FreeImage/Source/OpenEXR",
+                        "../../External/android-lib-freeimage/FreeImage/Source/OpenEXR/IlmImf",
+                        "../../External/android-lib-freeimage/FreeImage/Source/OpenEXR/Imath",
+                        "../../External/android-lib-freeimage/FreeImage/Source/OpenEXR/Iex",
+                        "../../External/android-lib-freeimage/FreeImage/Source/OpenEXR/Half",
+                        "../../External/android-lib-freeimage/FreeImage/Source/OpenEXR/IlmThread",
+                        "../../External/android-lib-freeimage/FreeImage/Source/LibRawLite",
+                        "../../External/android-lib-freeimage/missing",
+                ]
+            }
+        }
+    }
+}

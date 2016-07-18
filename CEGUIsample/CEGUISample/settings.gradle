@@ -1,0 +1,1 @@
+include ':app', ':cegui', ':freetype', ':freeimage', ':pcre', ':tinyxml', ':toluapp', ':lua', ':png'

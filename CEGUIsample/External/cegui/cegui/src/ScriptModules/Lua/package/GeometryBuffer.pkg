@@ -1,0 +1,23 @@
+/***********************************************************************
+    GeometryBuffer
+***********************************************************************/
+class GeometryBuffer
+{
+public:
+    void draw() const;
+
+    //void setTransform(const float* matrix);
+
+    void setTranslation(const glm::vec3& v);
+    void setRotation(const glm::quat& r);
+    void setScale(const glm::vec2& scale);
+    void setPivot(const glm::vec3& p);
+    void appendVertex(const CEGUI::TexturedColouredVertex& vertex);
+    void appendVertex(const CEGUI::ColouredVertex& vertex);
+    void appendGeometry(const CEGUI::ColouredVertex* vbuff, unsigned int vertex_count);
+    void setTexture(const std::string& parameterName, const Texture* texture);
+    void reset();
+    unsigned int getVertexCount() const;
+    void setRenderEffect(RenderEffect* effect);
+    RenderEffect* getRenderEffect();
+};

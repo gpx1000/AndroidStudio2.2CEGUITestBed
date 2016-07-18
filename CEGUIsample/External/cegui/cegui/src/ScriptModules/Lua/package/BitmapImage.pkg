@@ -1,0 +1,10 @@
+/***********************************************************************
+    BitmapImage
+***********************************************************************/
+class BitmapImage : public Image
+{
+    void setTexture(Texture* texture);
+    void setAutoScaled(AutoScaledMode mode);
+    void setNativeResolution(const Size<float>& native_res);
+};
+

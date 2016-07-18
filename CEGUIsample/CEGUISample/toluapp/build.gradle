@@ -1,0 +1,52 @@
+apply plugin: 'com.android.model.library'
+
+model {
+    android {
+        compileSdkVersion = rootProject.ext.compileSdkVersion
+        buildToolsVersion = rootProject.ext.buildToolsVersion
+
+        defaultConfig.with {
+            minSdkVersion.apiLevel = rootProject.ext.minSdkVersion
+            targetSdkVersion.apiLevel = rootProject.ext.targetSdkVersion
+            versionCode = rootProject.ext.versionCode
+            versionName = rootProject.ext.versionName
+        }
+
+    }
+    android.ndk {
+        moduleName "toluapp"
+        CFlags.addAll(["-DFT2_BUILD_LIBRARY=1", "-Wno-error=format-security"])
+        CFlags.add("-I../../External/tolua++-1.0.93/include/")
+        CFlags.add("-I../../External/lua-5.1.4/src")
+        cppFlags.addAll(CFlags)
+        stl "gnustl_shared"
+        abiFilters.add("armeabi-v7a")
+        platformVersion rootProject.ext.platformVersion
+    }
+
+    android.sources.main{
+        jni {
+            source {
+                srcDirs = [
+                        '../../External/tolua++-1.0.93/src/lib/',
+                        '../../External/tolua++-1.0.93/include/',
+                        '../../External/tolua++-1.0.93/jni/'
+                ]
+            }
+
+            exportedHeaders {
+                srcDirs = [
+                        '../../External/tolua++-1.0.93/include',
+                        '../../External/lua-5.1.4/src'
+                ]
+            }
+            dependencies {
+                project ":lua"
+            }
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+}

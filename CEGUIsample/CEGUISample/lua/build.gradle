@@ -1,0 +1,51 @@
+apply plugin: 'com.android.model.library'
+
+model {
+    android {
+        compileSdkVersion = rootProject.ext.compileSdkVersion
+        buildToolsVersion = rootProject.ext.buildToolsVersion
+
+        defaultConfig.with {
+            minSdkVersion.apiLevel = rootProject.ext.minSdkVersion
+            targetSdkVersion.apiLevel = rootProject.ext.targetSdkVersion
+            versionCode = rootProject.ext.versionCode
+            versionName = rootProject.ext.versionName
+        }
+    }
+    android.ndk {
+        moduleName "lua"
+        CFlags.add("-I../../External/lua-5.1.4")
+        cppFlags.addAll(CFlags)
+        stl "gnustl_shared"
+        platformVersion rootProject.ext.platformVersion
+        abiFilters.add("armeabi-v7a")
+    }
+    android.sources.main{
+        jni {
+            source {
+                exclude "**/lua.c"
+                exclude "**/luac.*"
+                srcDirs = [
+                        '../../External/lua-5.1.4/src'
+                ]
+            }
+            exportedHeaders {
+                srcDirs = [
+                        '../../External/lua-5.1.4',
+                        '../../External/lua-5.1.4/src'
+                ]
+            }
+        }
+        jniLibs {
+            source {
+                srcDirs.add('src/main/libs')
+            }
+        }
+        java {
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+}

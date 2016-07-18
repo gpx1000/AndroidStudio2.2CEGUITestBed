@@ -1,0 +1,7 @@
+/***********************************************************************
+	TreeView
+***********************************************************************/
+class TreeView : public Window
+{
+	tolua_throws|CEGUI::Exception,error|std::exception,error|any,error| CEGUI::TreeViewItemRenderingState* getTreeViewItemForIndex(const CEGUI::ModelIndex& index);
+};

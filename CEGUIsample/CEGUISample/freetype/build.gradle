@@ -1,0 +1,120 @@
+apply plugin: 'com.android.model.library'
+
+model {
+    android {
+        compileSdkVersion rootProject.ext.compileSdkVersion
+        buildToolsVersion rootProject.ext.buildToolsVersion
+
+        defaultConfig.with {
+            minSdkVersion.apiLevel rootProject.ext.minSdkVersion
+            targetSdkVersion.apiLevel rootProject.ext.targetSdkVersion
+            versionCode rootProject.ext.versionCode
+            versionName rootProject.ext.versionName
+        }
+
+    }
+    android.ndk {
+        moduleName "freetype"
+        CFlags.addAll(["-DFT2_BUILD_LIBRARY=1", "-fPIC", "-Wno-error=format-security"])
+        CFlags.add("-I../../External/freetype-2.4.4/include/")
+        cppFlags.addAll(CFlags)
+        ldLibs.add("z")
+        stl "gnustl_shared"
+        abiFilters.add("armeabi-v7a")
+        platformVersion rootProject.ext.platformVersion
+    }
+
+    android.sources.main{
+        jni {
+            source {
+                exclude '**/aflatin2.c'
+                exclude '**/ftmac.c'
+                exclude "**/infutil.c"
+                exclude "**/psauxmod.*"
+                exclude "**/pshmod.*"
+                exclude "**/ttsbit.*"
+                exclude "**/ttsbit0.*"
+                exclude "**/otvmod.*"
+                exclude "**/t1driver.*"
+                exclude "**/ftcbasic.*"
+                exclude "**/test_afm.*"
+                exclude "**/afcjk.*"
+                exclude "**/cffcmap.*"
+                exclude "**/ftsmooth.*"
+                exclude "**/ftgrays.*"
+                exclude "**/ttdriver.*"
+                exclude "**/ttinterp.*"
+                exclude "**/ftgloadr.*"
+                exclude "**/ftobjs.*"
+                exclude "**/ftcalc.*"
+                exclude "**/ftstream.*"
+                exclude "**/ftrfork.*"
+                exclude "**/fttrigon.*"
+                exclude "**/ftutil.*"
+                exclude "**/afindic.*"
+                exclude "**/ftrend1.*"
+                exclude "**/ftraster.*"
+                exclude "**/ftadvanc.*"
+                exclude "**/ftsnames.*"
+                exclude "**/ftrandom.*"
+                exclude "**/gxvfgen.*"
+                exclude "**/sfdriver.*"
+                exclude "**/ttcmap.*"
+                exclude "**/psmodule.*"
+                exclude "**/afhints.*"
+                exclude "**/cidriver.*"
+                exclude "**/ftccache.*"
+                exclude "**/pshalgo.*"
+                exclude "**/ftzopen.*"
+                exclude "**/pfrcmap.*"
+                exclude "**/pfrdrivr.*"
+                exclude "**/test_bbox.*"
+                exclude "**/apinames.*"
+                exclude "**/bdfdrivr.*"
+                exclude "**/aflatin.*"
+                exclude "**/afmodule.*"
+                exclude "**/gxvmod.*"
+                exclude "**/t1cmap.*"
+                exclude "**/ftcmanag.*"
+                exclude "**/pcfdrivr.*"
+                exclude "**/afdummy.*"
+                exclude "**/t42drivr.*"
+                exclude "**/ftoutln.*"
+                exclude "**/cffdrivr.*"
+                exclude "**/ftccmap.*"
+                exclude "**/ttobjs.c"
+                exclude "**/ttgload.c"
+                exclude "**/afloader.c"
+                exclude "**/sfobjs.c"
+                exclude "**/ftcglyph.c"
+                exclude "**/ftcsbits.c"
+                exclude "**/ftcimage.c"
+                exclude "**/zutil.c"
+                exclude "**/infblock.c"
+                exclude "**/inflate.c"
+                exclude "**/infcodes.c"
+                exclude "**/inftrees.c"
+                exclude "**/adler32.c"
+                exclude "**/infutil.c"
+                srcDirs = [
+                        '../../External/freetype-2.4.4/src',
+                        '../../External/freetype-2.4.4/jni'
+                ]
+            }
+            exportedHeaders {
+                srcDirs = [
+                        '../../External/freetype-2.4.4/include/'
+                ]
+            }
+        }
+        jniLibs {
+            source {
+                srcDirs.add('src/main/libs')
+            }
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+}

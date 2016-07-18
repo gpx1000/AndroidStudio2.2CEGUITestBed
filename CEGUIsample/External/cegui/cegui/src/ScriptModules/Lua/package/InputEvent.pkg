@@ -1,0 +1,126 @@
+/***********************************************************************
+	EventArgs
+***********************************************************************/
+class EventArgs
+{
+	unsigned int handled;
+
+	EventArgs();
+};
+
+
+
+/***********************************************************************
+	CursorEventArgs
+***********************************************************************/
+class CursorEventArgs : public EventArgs
+{
+	Cursor* d_cursor;
+	const Image* d_image;
+
+	CursorEventArgs(Cursor* cursor);
+};
+
+
+
+/***********************************************************************
+	WindowEventArgs
+***********************************************************************/
+class WindowEventArgs : public EventArgs
+{
+	Window* window;
+
+	WindowEventArgs(Window* wnd);
+};
+
+
+
+/***********************************************************************
+	ActivationEventArgs
+***********************************************************************/
+class ActivationEventArgs : public WindowEventArgs
+{
+	Window* otherWindow;
+
+	ActivationEventArgs(Window* wnd);
+};
+
+
+
+/***********************************************************************
+	HeaderSequenceEventArgs
+***********************************************************************/
+class HeaderSequenceEventArgs : public WindowEventArgs
+{
+	// remove 'd_' member variable prefix
+	unsigned int d_oldIdx @ oldIdx;
+	unsigned int d_newIdx @ newIdx;
+
+	HeaderSequenceEventArgs(Window* wnd, unsigned int old_index, unsigned int new_index);
+};
+
+
+
+/***********************************************************************
+	MouseButton
+***********************************************************************/
+enum MouseButton
+{
+	LeftButton,
+	RightButton,
+	MiddleButton,
+	X1Button,
+	X2Button,
+	MouseButtonCount,
+	NoButton
+};
+
+
+
+/***********************************************************************
+	CursorInputEventArgs
+***********************************************************************/
+class CursorInputEventArgs : public WindowEventArgs
+{
+	glm::vec2 position;
+	glm::vec2 moveDelta;
+	CEGUI::CursorInputSource source;
+	float scroll;
+	CEGUI::CursorsState state;
+
+	CursorInputEventArgs(Window* wnd);
+};
+
+
+
+/***********************************************************************
+	TextEventArgs
+***********************************************************************/
+class TextEventArgs : public WindowEventArgs
+{
+	CEGUI::String::value_type character;
+
+	TextEventArgs(Window* wnd);
+};
+
+
+
+/************************************************************************
+    DragDropEventArgs
+*************************************************************************/
+class DragDropEventArgs : public WindowEventArgs
+{
+    DragContainer* dragDropItem;
+
+    DragDropEventArgs(Window* wnd);
+};
+
+/***********************************************************************
+    RenderQueueEventArgs
+***********************************************************************/
+class RenderQueueEventArgs : public EventArgs
+{
+    RenderQueueID queueID;
+
+    RenderQueueEventArgs(RenderQueueID id);
+};

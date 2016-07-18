@@ -1,0 +1,12 @@
+/***********************************************************************
+    TexturedColouredVertex struct
+***********************************************************************/
+struct TexturedColouredVertex
+{
+    //! Position of the vertex in 3D space.
+        glm::vec3   d_position;
+        //! Multiplicative-colour attribute of the vertex.
+        glm::vec4   d_colour;
+        //! Texture coordinates of the vertex.
+        glm::vec2   d_texCoords;
+};

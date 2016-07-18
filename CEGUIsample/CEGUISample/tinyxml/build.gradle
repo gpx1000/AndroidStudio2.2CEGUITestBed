@@ -1,0 +1,43 @@
+apply plugin: 'com.android.model.library'
+
+model {
+    android {
+        compileSdkVersion = rootProject.ext.compileSdkVersion
+        buildToolsVersion = rootProject.ext.buildToolsVersion
+
+        defaultConfig.with {
+            minSdkVersion.apiLevel = rootProject.ext.minSdkVersion
+            targetSdkVersion.apiLevel = rootProject.ext.targetSdkVersion
+            versionCode = rootProject.ext.versionCode
+            versionName = rootProject.ext.versionName
+        }
+
+    }
+    android.ndk {
+        moduleName "tinyxml"
+        CFlags.add("-frtti")
+        CFlags.add("-I../../External/tinyxml-2.6.2/")
+        cppFlags.addAll(CFlags)
+        stl "gnustl_shared"
+        abiFilters.add("armeabi-v7a")
+        platformVersion rootProject.ext.platformVersion
+    }
+
+    android.sources.main.jni {
+        source {
+            exclude "**/xmltest.cpp"
+            srcDirs = [
+                    '../../External/tinyxml-2.6.2/'
+            ]
+        }
+        exportedHeaders {
+            srcDirs = [
+                    '../../External/tinyxml-2.6.2/'
+            ]
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+}

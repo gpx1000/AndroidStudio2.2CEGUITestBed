@@ -1,0 +1,9 @@
+/***********************************************************************
+    RenderingContext
+***********************************************************************/
+struct RenderingContext
+{
+    RenderingSurface* surface;
+    const Window* owner;
+    glm::vec2 offset;
+};
