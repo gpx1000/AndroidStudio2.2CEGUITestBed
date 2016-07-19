@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 
 android {
+    publishNonDefault true
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
 
@@ -43,21 +44,42 @@ android {
                         "-DCEGUI_OPTION_SAFE_LUA_MODULE=OFF", //Specifies whether to enable extra validation in the Lua script module in non-debug builds
                         "-DCEGUI_SAMPLES_ENABLED=OFF", //Specifies whether to build the CEGUI sample applications
                         "-DPCRE_H_PATH=../../External/pcre-8.12",
-                        "-DPCRE_LIB=../pcre/build/intermediates/binaries/debug/lib/armeabi-v7a/libpcre.so",
                         "-DFREEIMAGE_H_PATH=../../External/android-lib-freeimage/FreeImage/Source",
-                        "-DFREEIMAGE_LIB=../freeimage/build/intermediates/binaries/debug/lib/armeabi-v7a/libfreeimage.so",
                         "-DFREETYPE_H_PATH_ft2build=../../External/freetype-2.4.4/include",
                         "-DFREETYPE_H_PATH_ftconfig=../../External/freetype-2.4.4/include",
-                        "-DFREETYPE_LIB=../freetype/build/intermediates/binaries/debug/lib/armeabi-v7a/libfreetype.so",
                         "-DLUA_H_PATH=../../External/lua-5.1.4/src",
-                        "-DLUA_LIB=../lua/build/intermediates/binaries/debug/lib/armeabi-v7a/liblua.so",
                         "-DTOLUAPP_H_PATH=../../External/tolua++-1.0.93/include",
-                        "-DTOLUAPP_LIB=../toluapp/build/intermediates/binaries/debug/lib/armeabi-v7a/libtoluapp.so",
                         "-DTINYXML_H_PATH=../../External/tinyxml-2.6.2",
-                        "-DTINYXML_LIB=../toluapp/build/intermediates/binaries/debug/lib/armeabi-v7a/libtinyxml.so",
                         "-DCEGUI_TINYXML_HAS_2_6_API=TRUE",
                         "-DGLM_H_PATH=../../External/cegui/cegui/include;${rootProject.ext.ndkDir}/sources/android/native_app_glue".toString()
                 abiFilters "armeabi-v7a"
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+            externalNativeBuild {
+                cmake {
+                    arguments "-DPCRE_LIB=../pcre/build/intermediates/binaries/debug/lib/armeabi-v7a/libpcre.so",
+                            "-DFREEIMAGE_LIB=../freeimage/build/intermediates/binaries/debug/lib/armeabi-v7a/libfreeimage.so",
+                            "-DFREETYPE_LIB=../freetype/build/intermediates/binaries/debug/lib/armeabi-v7a/libfreetype.so",
+                            "-DLUA_LIB=../lua/build/intermediates/binaries/debug/lib/armeabi-v7a/liblua.so",
+                            "-DTOLUAPP_LIB=../toluapp/build/intermediates/binaries/debug/lib/armeabi-v7a/libtoluapp.so",
+                            "-DTINYXML_LIB=../toluapp/build/intermediates/binaries/debug/lib/armeabi-v7a/libtinyxml.so"
+                }
+            }
+        }
+        release {
+            externalNativeBuild {
+                cmake {
+                    arguments "-DPCRE_LIB=../pcre/build/intermediates/binaries/release/lib/armeabi-v7a/libpcre.so",
+                            "-DFREEIMAGE_LIB=../freeimage/build/intermediates/binaries/release/lib/armeabi-v7a/libfreeimage.so",
+                            "-DFREETYPE_LIB=../freetype/build/intermediates/binaries/release/lib/armeabi-v7a/libfreetype.so",
+                            "-DLUA_LIB=../lua/build/intermediates/binaries/release/lib/armeabi-v7a/liblua.so",
+                            "-DTOLUAPP_LIB=../toluapp/build/intermediates/binaries/release/lib/armeabi-v7a/libtoluapp.so",
+                            "-DTINYXML_LIB=../toluapp/build/intermediates/binaries/release/lib/armeabi-v7a/libtinyxml.so"
+                }
             }
         }
     }
@@ -74,7 +96,6 @@ dependencies {
     compile project(':freeimage')
     compile project(':freetype')
     compile project(':pcre')
-    compile project(':png')
     compile project(':tinyxml')
     compile project(':lua')
     compile project(':toluapp')
