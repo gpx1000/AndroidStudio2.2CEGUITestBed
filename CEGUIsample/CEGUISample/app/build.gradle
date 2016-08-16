@@ -147,6 +147,39 @@ model {
     }
 }
 
+tasks.whenTaskAdded { task ->
+    if (task.name.startsWith('pre') && task.name.endsWith("Build")) {
+        task.dependsOn workaround
+    }
+}
+
+task workaround(description: "making empty files") {
+    String path = "../cegui/build/intermediates/cmake/release/lib/armeabi-v7a/"
+    project.exec { commandLine "/bin/echo" args path }
+    project.exec { commandLine "/bin/mkdir" args "-p", path }
+    if (!file(path + "libCEGUIBase-9999_Static.a").exists()) {
+        project.exec { commandLine "/usr/bin/touch", "-t", "197001010000", file(path + "libCEGUIBase-9999_Static.a").toString() }
+    }
+    if (!file(path + "libCEGUICommonDialogs-9999_Static.a").exists()) {
+        project.exec { commandLine "/usr/bin/touch", "-t", "197001010000", file(path + "libCEGUICommonDialogs-9999_Static.a").toString() }
+    }
+    if (!file(path + "libCEGUICoreWindowRendererSet_Static.a").exists()) {
+        project.exec { commandLine "/usr/bin/touch", "-t", "197001010000", file(path + "libCEGUICoreWindowRendererSet_Static.a").toString() }
+    }
+    if (!file(path + "libCEGUIFreeImageImageCodec_Static.a").exists()) {
+        project.exec { commandLine "/usr/bin/touch", "-t", "197001010000", file(path + "libCEGUIFreeImageImageCodec_Static.a").toString() }
+    }
+    if (!file(path + "libCEGUILuaScriptModule-9999_Static.a").exists()) {
+        project.exec { commandLine "/usr/bin/touch", "-t", "197001010000", file(path + "libCEGUILuaScriptModule-9999_Static.a") }
+    }
+    if (!file(path + "libCEGUIOpenGLRenderer-9999_Static.a").exists()) {
+        project.exec { commandLine "/usr/bin/touch", "-t", "197001010000", file(path + "libCEGUIOpenGLRenderer-9999_Static.a") }
+    }
+    if (!file(path + "libCEGUITinyXMLParser_Static.a").exists()) {
+        project.exec { commandLine "/usr/bin/touch", "-t", "197001010000", file(path + "libCEGUITinyXMLParser_Static.a") }
+    }
+}
+
 dependencies {
     compile project(path: ':cegui')
 }
