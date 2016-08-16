@@ -13,10 +13,10 @@ model {
                     staticLibraryFile = file("../../External/cegui/libs/${targetPlatform.getName()}/libandroid_native_app_glue.a")
                 }
             }
-            ceguiBaseRelease {
+            ceguiBase {
                 headers.srcDirs =
                         [
-                            "../cegui/externalNativeBuild/cmake/release/armeabi-v7a/cegui/include",
+                            "../cegui/.externalNativeBuild/cmake/release/armeabi-v7a/cegui/include",
                             "../../External/cegui/cegui/include",
                             "${rootProject.ext.ndkDir}/sources/android/native_app_glue"
                         ]
@@ -24,73 +24,32 @@ model {
                     staticLibraryFile = file("../cegui/build/intermediates/cmake/release/lib/${targetPlatform.getName()}/libCEGUIBase-9999_Static.a")
                 }
             }
-            ceguiBaseDebug {
-                headers.srcDirs =
-                        [
-                                "../cegui/externalNativeBuild/cmake/debug/armeabi-v7a/cegui/include",
-                                "../../External/cegui/cegui/include",
-                                "${rootProject.ext.ndkDir}/sources/android/native_app_glue"
-                        ]
-                binaries.withType(StaticLibraryBinary) {
-                    staticLibraryFile = file("../cegui/build/intermediates/cmake/debug/lib/${targetPlatform.getName()}/libCEGUIBase-9999_Static.a")
-                }
-            }
-            ceguiCommonDialogsRelease {
+            ceguiCommonDialogs {
                 binaries.withType(StaticLibraryBinary) {
                     staticLibraryFile = file("../cegui/build/intermediates/cmake/release/lib/${targetPlatform.getName()}/libCEGUICommonDialogs-9999_Static.a")
                 }
             }
-            ceguiCommonDialogsDebug {
-                binaries.withType(StaticLibraryBinary) {
-                    staticLibraryFile = file("../cegui/build/intermediates/cmake/debug/lib/${targetPlatform.getName()}/libCEGUICommonDialogs-9999_Static.a")
-                }
-            }
-            ceguiCoreRendererSetRelease {
+            ceguiCoreRendererSet {
                 binaries.withType(StaticLibraryBinary) {
                     staticLibraryFile = file("../cegui/build/intermediates/cmake/release/lib/${targetPlatform.getName()}/libCEGUICoreWindowRendererSet_Static.a")
                 }
             }
-            ceguiCoreRendererSetDebug {
-                binaries.withType(StaticLibraryBinary) {
-                    staticLibraryFile = file("../cegui/build/intermediates/cmake/debug/lib/${targetPlatform.getName()}/libCEGUICoreWindowRendererSet_Static.a")
-                }
-            }
-            ceguiFreeimageCodecRelease {
+            ceguiFreeimageCodec {
                 binaries.withType(StaticLibraryBinary) {
                     staticLibraryFile = file("../cegui/build/intermediates/cmake/release/lib/${targetPlatform.getName()}/libCEGUIFreeImageImageCodec_Static.a")
                 }
             }
-            ceguiFreeimageCodecDebug {
-                binaries.withType(StaticLibraryBinary) {
-                    staticLibraryFile = file("../cegui/build/intermediates/cmake/debug/lib/${targetPlatform.getName()}/libCEGUIFreeImageImageCodec_Static.a")
-                }
-            }
-            ceguiLuaRelease {
+            ceguiLua {
                 binaries.withType(StaticLibraryBinary) {
                     staticLibraryFile = file("../cegui/build/intermediates/cmake/release/lib/${targetPlatform.getName()}/libCEGUILuaScriptModule-9999_Static.a")
                 }
             }
-            ceguiLuaDebug {
-                binaries.withType(StaticLibraryBinary) {
-                    staticLibraryFile = file("../cegui/build/intermediates/cmake/debug/lib/${targetPlatform.getName()}/libCEGUILuaScriptModule-9999_Static.a")
-                }
-            }
-            ceguiOpenglRelease {
+            ceguiOpengl {
                 binaries.withType(StaticLibraryBinary) {
                     staticLibraryFile = file("../cegui/build/intermediates/cmake/release/lib/${targetPlatform.getName()}/libCEGUIOpenGLRenderer-9999_Static.a")
                 }
             }
-            ceguiOpenglDebug {
-                binaries.withType(StaticLibraryBinary) {
-                    staticLibraryFile = file("../cegui/build/intermediates/cmake/debug/lib/${targetPlatform.getName()}/libCEGUIOpenGLRenderer-9999_Static.a")
-                }
-            }
-            ceguiTinyxmlRelease {
-                binaries.withType(StaticLibraryBinary) {
-                    staticLibraryFile = file("../cegui/build/intermediates/cmake/release/lib/${targetPlatform.getName()}/libCEGUITinyXMLParser_Static.a")
-                }
-            }
-            ceguiTinyxmlDebug {
+            ceguiTinyxml {
                 binaries.withType(StaticLibraryBinary) {
                     staticLibraryFile = file("../cegui/build/intermediates/cmake/release/lib/${targetPlatform.getName()}/libCEGUITinyXMLParser_Static.a")
                 }
@@ -111,7 +70,7 @@ model {
         ndk {
             moduleName "native-lib"
             toolchain "clang"
-            stl "gnustl_shared"
+            stl "c++_shared"
             CFlags.add("-fexceptions")
             CFlags.add("-Wall")
             CFlags.add("-Werror")
@@ -162,7 +121,7 @@ model {
                     srcDirs = ['src/main/cpp']
                 }
                 dependencies {
-//            project ":cegui" linkage "static" //this is what the bug 213870 was. solution was to move to the gradle dependencies below
+//                    project ":cegui" linkage "static" //this is what the bug 213870 was. solution was to move to the gradle dependencies below
                     project ":freetype" linkage "shared"
                     project ":freeimage" linkage "shared"
                     project ":pcre" linkage "shared"
@@ -171,33 +130,13 @@ model {
                     project ":lua" linkage "shared"
                     library "iconvLib" linkage "static"
                     library "nativeAppGlue" linkage "static"
-                }
-            }
-        }
-        release {
-            jni {
-                dependencies {
-                    library "ceguiBaseRelease" linkage "static"
-                    library "ceguiCommonDialogsRelease" linkage "static"
-                    library "ceguiCoreRendererSetRelease" linkage "static"
-                    library "ceguiFreeimageCodecRelease" linkage "static"
-                    library "ceguiLuaRelease" linkage "static"
-                    library "ceguiOpenglRelease" linkage "static"
-                    library "ceguiTinyxmlRelease" linkage "static"
-                }
-            }
-        }
-        debug {
-            jni {
-                dependencies {
-                    library "ceguiBaseDebug" linkage "static"
-                    library "ceguiCommonDialogsDebug" linkage "static"
-                    library "ceguiCoreRendererSetDebug" linkage "static"
-                    library "ceguiFreeimageCodecDebug" linkage "static"
-                    library "ceguiLuaDebug" linkage "static"
-                    library "ceguiOpenglDebug" linkage "static"
-                    library "ceguiTinyxmlDebug" linkage "static"
-
+                    library "ceguiBase" linkage "static"
+                    library "ceguiCommonDialogs" linkage "static"
+                    library "ceguiCoreRendererSet" linkage "static"
+                    library "ceguiFreeimageCodec" linkage "static"
+                    library "ceguiLua" linkage "static"
+                    library "ceguiOpengl" linkage "static"
+                    library "ceguiTinyxml" linkage "static"
                 }
             }
         }
@@ -209,6 +148,5 @@ model {
 }
 
 dependencies {
-    compile project(path: ':cegui', configuration: "release")
-    compile project(path: ':cegui', configuration: "debug")
+    compile project(path: ':cegui')
 }

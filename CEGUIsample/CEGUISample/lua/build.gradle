@@ -16,7 +16,8 @@ model {
         moduleName "lua"
         CFlags.add("-I../../External/lua-5.1.4")
         cppFlags.addAll(CFlags)
-        stl "gnustl_shared"
+        toolchain "clang"
+        stl "c++_shared"
         platformVersion rootProject.ext.platformVersion
         abiFilters.add("armeabi-v7a")
     }

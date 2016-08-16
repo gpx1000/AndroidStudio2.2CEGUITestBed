@@ -19,7 +19,8 @@ model {
         CFlags.add("-I../../External/tolua++-1.0.93/include/")
         CFlags.add("-I../../External/lua-5.1.4/src")
         cppFlags.addAll(CFlags)
-        stl "gnustl_shared"
+        toolchain "clang"
+        stl "c++_shared"
         abiFilters.add("armeabi-v7a")
         platformVersion rootProject.ext.platformVersion
     }

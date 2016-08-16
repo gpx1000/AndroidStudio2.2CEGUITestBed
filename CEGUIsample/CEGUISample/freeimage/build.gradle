@@ -15,7 +15,7 @@ model {
     }
     android.ndk {
         moduleName "freeimage"
-        CFlags.addAll(["-DFREEIMAGE_LIB=1", "-DPNG_STATIC=1", "-DSTDC_HEADERS=1", "-Wno-error=format-security"])
+        CFlags.addAll(["-DFREEIMAGE_LIB=1", "-DPNG_STATIC=1", "-DSTDC_HEADERS=1", "-Wno-error=format-security", "-Wno-narrowing"])
         CFlags.add("-I../../External/android-lib-freeimage/FreeImage/Source/")
         CFlags.add("-I../../External/android-lib-freeimage/FreeImage/Source/Metadata")
         CFlags.add("-I../../External/android-lib-freeimage/FreeImage/Source/DeprecationManager")
@@ -31,7 +31,8 @@ model {
         cppFlags.add("-fexceptions")
         cppFlags.add("-frtti")
         ldLibs.add("z")
-        stl "gnustl_shared"
+        toolchain "clang"
+        stl "c++_shared"
         abiFilters.add("armeabi-v7a")
         platformVersion rootProject.ext.platformVersion
     }

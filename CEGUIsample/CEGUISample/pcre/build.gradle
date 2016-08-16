@@ -22,7 +22,8 @@ model {
         CFlags.add("-DHAVE_INTTYPES_H=0")
         CFlags.add("-Wno-error=format-security")
         cppFlags.addAll(CFlags)
-        stl "gnustl_shared"
+        toolchain "clang"
+        stl "c++_shared"
         abiFilters.add("armeabi-v7a")
         platformVersion rootProject.ext.platformVersion
     }

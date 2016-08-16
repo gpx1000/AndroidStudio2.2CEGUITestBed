@@ -1,96 +1,97 @@
-apply plugin: 'com.android.library'
+apply plugin: 'com.android.model.library'
 
-android {
-    publishNonDefault true
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+model {
+    android {
+        publishNonDefault true
+        compileSdkVersion rootProject.ext.compileSdkVersion
+        buildToolsVersion rootProject.ext.buildToolsVersion
 
-    defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode rootProject.ext.versionCode
-        versionName rootProject.ext.versionName
+        defaultConfig.with {
+            minSdkVersion.apiLevel rootProject.ext.minSdkVersion
+            targetSdkVersion.apiLevel rootProject.ext.targetSdkVersion
+            versionCode rootProject.ext.versionCode
+            versionName rootProject.ext.versionName
+            externalNativeBuild {
+                cmake {
+                    arguments.addAll( "-DANDROID_FORBID_SYGWIN=TRUE", //Prevent cmake from working under cygwin and using cygwin tools
+                            "-DANDROID_FORCE_ARM_BUILD=OFF", //Use 32-bit ARM instructions instead of Thumb-1
+                            "-DANDROID_FUNCTION_LEVEL_LINKING=ON", //Allows or disallows undefined symbols in shared libraries
+                            "-DANDROID_NATIVE_API_LEVEL=18", //Android API level for native code
+                            "-DANDROID_NDK_HOST_X64=1", //Try to use 64-bit compiler toolchain
+                            "-DANDROID_NDK_LAYOUT=RELEASE", //The inner layout of NDK
+                            "-DANDROID_NOEXECSTACK=ON", //Allows or disallows undefined symbols in shared libraries
+                            "-DANDROID_NO_UNDEFINED=ON", //Show all undefined symbols as linker errors
+                            "-DANDROID_RELRO=ON", //Enables RELRO - a memory corruption mitigation technique
+                            "-DANDROID_SO_UNDEFINED=OFF", //Allows or disallows undefined symbols in shared libraries
+                            "-DANDROID_STL=c++_shared", //C++ runtime
+                            "-DANDROID_STL_FORCE_FEATURES=ON", //automatically configure rtti and exceptions support based on C++ runtime
+                            "-DCEGUI_BUILD_COMMON_DIALOGS=ON", //Specifies whether to build the CommonDialogs library
+                            "-DCEGUI_BUILD_IMAGECODEC_FREEIMAGE=ON", //Specifies whether to build the FreeImage based ImageCodec module
+                            "-DCEGUI_BUILD_LUA_GENERATOR=OFF", //Specifies whether to build the custom tolua binding generator
+                            "-DCEGUI_BUILD_LUA_MODULE=ON", //Specifies whether to build the Lua based script module
+                            "-DCEGUI_BUILD_PYTHON_MODULES=OFF", //Specifies whether to build the Python extension module(s)
+                            "-DCEGUI_BUILD_RENDERER_OPENGLES2=ON", //Specifies whether to build the OpenGLES2 renderer module
+                            "-DCEGUI_BUILD_RENDERER_OPENGLES2_WITH_GLES3_SUPPORT=ON", //Build the OpenGLES2 renderer module with GLES3 features
+                            "-DCEGUI_BUILD_STATIC_CONFIGURATION=TRUE", //Forcing static build for Android
+                            "-DCEGUI_BUILD_STATIC_FACTORY_MODULE=TRUE", //Forcing static factory module for Android
+                            "-DCEGUI_BUILD_XMLPARSER_TINYXML=ON", //Specifies whether to build the TinyXML based XMLParser module
+                            "-DCEGUI_DEPENDENCIES_DIR=../",  //No help, variable specified on the command line.
+                            "-DCEGUI_HAS_DEFAULT_LOGGER=ON", //Specifies whether to build the DefaultLogger implementation
+                            "-DCEGUI_HAS_FREETYPE=ON", //Specifies whether to include Freetype font support
+                            "-DCEGUI_HAS_PCRE_REGEX=ON", //Specifies whether to include PCRE regexp matching for editbox string validation
+                            "-DCEGUI_INSTALL_WITH_RPATH=OFF", //Specifies whether to install with RPATH set to the install location
+                            "-DCEGUI_OPTION_DEFAULT_IMAGECODEC=FreeImageImageCodec", //Specifies the ImageCodec module to use as the default
+                            "-DCEGUI_OPTION_DEFAULT_XMLPARSER=TinyXMLParser", //Specifies the XMLParser module to use as the default
+                            "-DCEGUI_OPTION_SAFE_LUA_MODULE=OFF", //Specifies whether to enable extra validation in the Lua script module in non-debug builds
+                            "-DCEGUI_SAMPLES_ENABLED=OFF", //Specifies whether to build the CEGUI sample applications
+                            "-DPCRE_H_PATH=../../External/pcre-8.12",
+                            "-DFREEIMAGE_H_PATH=../../External/android-lib-freeimage/FreeImage/Source",
+                            "-DFREETYPE_H_PATH_ft2build=../../External/freetype-2.4.4/include",
+                            "-DFREETYPE_H_PATH_ftconfig=../../External/freetype-2.4.4/include",
+                            "-DLUA_H_PATH=../../External/lua-5.1.4/src",
+                            "-DTOLUAPP_H_PATH=../../External/tolua++-1.0.93/include",
+                            "-DTINYXML_H_PATH=../../External/tinyxml-2.6.2",
+                            "-DCEGUI_TINYXML_HAS_2_6_API=TRUE",
+                            "-DGLM_H_PATH=../../External/cegui/cegui/include;${rootProject.ext.ndkDir}/sources/android/native_app_glue".toString())
+                    abiFilters.add( "armeabi-v7a" )
+                }
+            }
+        }
+
+        buildTypes {
+            debug {
+                externalNativeBuild {
+                    cmake {
+                        arguments.addAll( "-DPCRE_LIB=../pcre/build/intermediates/binaries/debug/lib/armeabi-v7a/libpcre.so",
+                                "-DFREEIMAGE_LIB=../freeimage/build/intermediates/binaries/debug/lib/armeabi-v7a/libfreeimage.so",
+                                "-DFREETYPE_LIB=../freetype/build/intermediates/binaries/debug/lib/armeabi-v7a/libfreetype.so",
+                                "-DLUA_LIB=../lua/build/intermediates/binaries/debug/lib/armeabi-v7a/liblua.so",
+                                "-DTOLUAPP_LIB=../toluapp/build/intermediates/binaries/debug/lib/armeabi-v7a/libtoluapp.so",
+                                "-DTINYXML_LIB=../toluapp/build/intermediates/binaries/debug/lib/armeabi-v7a/libtinyxml.so" )
+                    }
+                }
+            }
+            release {
+                externalNativeBuild {
+                    cmake {
+                        arguments.addAll( "-DPCRE_LIB=../pcre/build/intermediates/binaries/release/lib/armeabi-v7a/libpcre.so",
+                                "-DFREEIMAGE_LIB=../freeimage/build/intermediates/binaries/release/lib/armeabi-v7a/libfreeimage.so",
+                                "-DFREETYPE_LIB=../freetype/build/intermediates/binaries/release/lib/armeabi-v7a/libfreetype.so",
+                                "-DLUA_LIB=../lua/build/intermediates/binaries/release/lib/armeabi-v7a/liblua.so",
+                                "-DTOLUAPP_LIB=../toluapp/build/intermediates/binaries/release/lib/armeabi-v7a/libtoluapp.so",
+                                "-DTINYXML_LIB=../toluapp/build/intermediates/binaries/release/lib/armeabi-v7a/libtinyxml.so" )
+                    }
+                }
+            }
+        }
+
         externalNativeBuild {
             cmake {
-                arguments "-DANDROID_FORBID_SYGWIN=TRUE", //Prevent cmake from working under cygwin and using cygwin tools
-                        "-DANDROID_FORCE_ARM_BUILD=OFF", //Use 32-bit ARM instructions instead of Thumb-1
-                        "-DANDROID_FUNCTION_LEVEL_LINKING=ON", //Allows or disallows undefined symbols in shared libraries
-                        "-DANDROID_NATIVE_API_LEVEL=18", //Android API level for native code
-                        "-DANDROID_NDK_HOST_X64=1", //Try to use 64-bit compiler toolchain
-                        "-DANDROID_NDK_LAYOUT=RELEASE", //The inner layout of NDK
-                        "-DANDROID_NOEXECSTACK=ON", //Allows or disallows undefined symbols in shared libraries
-                        "-DANDROID_NO_UNDEFINED=ON", //Show all undefined symbols as linker errors
-                        "-DANDROID_RELRO=ON", //Enables RELRO - a memory corruption mitigation technique
-                        "-DANDROID_SO_UNDEFINED=OFF", //Allows or disallows undefined symbols in shared libraries
-                        "-DANDROID_STL=gnustl_static", //C++ runtime
-                        "-DANDROID_STL_FORCE_FEATURES=ON", //automatically configure rtti and exceptions support based on C++ runtime
-                        "-DCEGUI_BUILD_COMMON_DIALOGS=ON", //Specifies whether to build the CommonDialogs library
-                        "-DCEGUI_BUILD_IMAGECODEC_FREEIMAGE=ON", //Specifies whether to build the FreeImage based ImageCodec module
-                        "-DCEGUI_BUILD_LUA_GENERATOR=OFF", //Specifies whether to build the custom tolua binding generator
-                        "-DCEGUI_BUILD_LUA_MODULE=ON", //Specifies whether to build the Lua based script module
-                        "-DCEGUI_BUILD_PYTHON_MODULES=OFF", //Specifies whether to build the Python extension module(s)
-                        "-DCEGUI_BUILD_RENDERER_OPENGLES2=ON", //Specifies whether to build the OpenGLES2 renderer module
-                        "-DCEGUI_BUILD_RENDERER_OPENGLES2_WITH_GLES3_SUPPORT=ON", //Build the OpenGLES2 renderer module with GLES3 features
-                        "-DCEGUI_BUILD_STATIC_CONFIGURATION=TRUE", //Forcing static build for Android
-                        "-DCEGUI_BUILD_STATIC_FACTORY_MODULE=TRUE", //Forcing static factory module for Android
-                        "-DCEGUI_BUILD_XMLPARSER_TINYXML=ON", //Specifies whether to build the TinyXML based XMLParser module
-                        "-DCEGUI_DEPENDENCIES_DIR=../",  //No help, variable specified on the command line.
-                        "-DCEGUI_HAS_DEFAULT_LOGGER=ON", //Specifies whether to build the DefaultLogger implementation
-                        "-DCEGUI_HAS_FREETYPE=ON", //Specifies whether to include Freetype font support
-                        "-DCEGUI_HAS_PCRE_REGEX=ON", //Specifies whether to include PCRE regexp matching for editbox string validation
-                        "-DCEGUI_INSTALL_WITH_RPATH=OFF", //Specifies whether to install with RPATH set to the install location
-                        "-DCEGUI_OPTION_DEFAULT_IMAGECODEC=FreeImageImageCodec", //Specifies the ImageCodec module to use as the default
-                        "-DCEGUI_OPTION_DEFAULT_XMLPARSER=TinyXMLParser", //Specifies the XMLParser module to use as the default
-                        "-DCEGUI_OPTION_SAFE_LUA_MODULE=OFF", //Specifies whether to enable extra validation in the Lua script module in non-debug builds
-                        "-DCEGUI_SAMPLES_ENABLED=OFF", //Specifies whether to build the CEGUI sample applications
-                        "-DPCRE_H_PATH=../../External/pcre-8.12",
-                        "-DFREEIMAGE_H_PATH=../../External/android-lib-freeimage/FreeImage/Source",
-                        "-DFREETYPE_H_PATH_ft2build=../../External/freetype-2.4.4/include",
-                        "-DFREETYPE_H_PATH_ftconfig=../../External/freetype-2.4.4/include",
-                        "-DLUA_H_PATH=../../External/lua-5.1.4/src",
-                        "-DTOLUAPP_H_PATH=../../External/tolua++-1.0.93/include",
-                        "-DTINYXML_H_PATH=../../External/tinyxml-2.6.2",
-                        "-DCEGUI_TINYXML_HAS_2_6_API=TRUE",
-                        "-DGLM_H_PATH=../../External/cegui/cegui/include;${rootProject.ext.ndkDir}/sources/android/native_app_glue".toString()
-                abiFilters "armeabi-v7a"
+                path "../../External/cegui/CMakeLists.txt"
             }
-        }
-    }
-
-    buildTypes {
-        debug {
-            externalNativeBuild {
-                cmake {
-                    arguments "-DPCRE_LIB=../pcre/build/intermediates/binaries/debug/lib/armeabi-v7a/libpcre.so",
-                            "-DFREEIMAGE_LIB=../freeimage/build/intermediates/binaries/debug/lib/armeabi-v7a/libfreeimage.so",
-                            "-DFREETYPE_LIB=../freetype/build/intermediates/binaries/debug/lib/armeabi-v7a/libfreetype.so",
-                            "-DLUA_LIB=../lua/build/intermediates/binaries/debug/lib/armeabi-v7a/liblua.so",
-                            "-DTOLUAPP_LIB=../toluapp/build/intermediates/binaries/debug/lib/armeabi-v7a/libtoluapp.so",
-                            "-DTINYXML_LIB=../toluapp/build/intermediates/binaries/debug/lib/armeabi-v7a/libtinyxml.so"
-                }
-            }
-        }
-        release {
-            externalNativeBuild {
-                cmake {
-                    arguments "-DPCRE_LIB=../pcre/build/intermediates/binaries/release/lib/armeabi-v7a/libpcre.so",
-                            "-DFREEIMAGE_LIB=../freeimage/build/intermediates/binaries/release/lib/armeabi-v7a/libfreeimage.so",
-                            "-DFREETYPE_LIB=../freetype/build/intermediates/binaries/release/lib/armeabi-v7a/libfreetype.so",
-                            "-DLUA_LIB=../lua/build/intermediates/binaries/release/lib/armeabi-v7a/liblua.so",
-                            "-DTOLUAPP_LIB=../toluapp/build/intermediates/binaries/release/lib/armeabi-v7a/libtoluapp.so",
-                            "-DTINYXML_LIB=../toluapp/build/intermediates/binaries/release/lib/armeabi-v7a/libtinyxml.so"
-                }
-            }
-        }
-    }
-
-    externalNativeBuild {
-        cmake {
-            path "../../External/cegui/CMakeLists.txt"
         }
     }
 }
-
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':freeimage')

@@ -15,11 +15,12 @@ model {
     }
     android.ndk {
         moduleName "freetype"
-        CFlags.addAll(["-DFT2_BUILD_LIBRARY=1", "-fPIC", "-Wno-error=format-security"])
+        CFlags.addAll(["-DFT2_BUILD_LIBRARY=1", "-fPIC", "-Wno-error=format-security", "-Wnoswitch"])
         CFlags.add("-I../../External/freetype-2.4.4/include/")
         cppFlags.addAll(CFlags)
         ldLibs.add("z")
-        stl "gnustl_shared"
+        toolchain "clang"
+        stl "c++_shared"
         abiFilters.add("armeabi-v7a")
         platformVersion rootProject.ext.platformVersion
     }

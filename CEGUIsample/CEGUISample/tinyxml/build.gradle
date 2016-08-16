@@ -18,7 +18,8 @@ model {
         CFlags.add("-frtti")
         CFlags.add("-I../../External/tinyxml-2.6.2/")
         cppFlags.addAll(CFlags)
-        stl "gnustl_shared"
+        toolchain "clang"
+        stl "c++_shared"
         abiFilters.add("armeabi-v7a")
         platformVersion rootProject.ext.platformVersion
     }
