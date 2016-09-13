@@ -31,8 +31,8 @@ model {
         cppFlags.add("-fexceptions")
         cppFlags.add("-frtti")
         ldLibs.add("z")
-        toolchain "clang"
-        stl "c++_shared"
+        toolchain "gcc"
+        stl "gnustl_shared"
         abiFilters.add("armeabi-v7a")
         platformVersion rootProject.ext.platformVersion
     }

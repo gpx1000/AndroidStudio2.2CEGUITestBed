@@ -7,8 +7,8 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.0-beta1'
-        classpath 'com.android.tools.build:gradle-experimental:0.8.0-beta1'
+        classpath 'com.android.tools.build:gradle:2.2.0-rc1'
+        classpath 'com.android.tools.build:gradle-experimental:0.8.0-rc1'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -37,11 +37,11 @@ properties.load(project.rootProject.file('local.properties').newDataInputStream(
 
 project.ext {
     compileSdkVersion = 23
-    buildToolsVersion = "23.0.2"
+    buildToolsVersion = "24.0.2"
     versionCode = versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild + getBuildNumber()
     versionName = "ver-${versionMajor}.${versionMinor}.${versionPatch} ${buildTime()}"
-    minSdkVersion = 21
-    platformVersion = "android-21"
+    minSdkVersion = 23
+    platformVersion = "android-23"
     targetSdkVersion = 23
     ndkDir = properties.getProperty('ndk.dir')
 }

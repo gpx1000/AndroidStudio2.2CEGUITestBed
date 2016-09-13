@@ -13,6 +13,7 @@ model {
             versionName rootProject.ext.versionName
             externalNativeBuild {
                 cmake {
+                    targets.addAll(["CEGUIOpenGLRenderer-9999_Static", "CEGUIFreeImageImageCodec_Static", "CEGUIBase-9999_Static", "CEGUILuaScriptModule-9999_Static", "CEGUITinyXMLParser_Static", "CEGUICommonDialogs-9999_Static", "CEGUICoreWindowRendererSet_Static"])
                     arguments.addAll( "-DANDROID_FORBID_SYGWIN=TRUE", //Prevent cmake from working under cygwin and using cygwin tools
                             "-DANDROID_FORCE_ARM_BUILD=OFF", //Use 32-bit ARM instructions instead of Thumb-1
                             "-DANDROID_FUNCTION_LEVEL_LINKING=ON", //Allows or disallows undefined symbols in shared libraries
@@ -67,7 +68,7 @@ model {
                                 "-DFREETYPE_LIB=../freetype/build/intermediates/binaries/debug/lib/armeabi-v7a/libfreetype.so",
                                 "-DLUA_LIB=../lua/build/intermediates/binaries/debug/lib/armeabi-v7a/liblua.so",
                                 "-DTOLUAPP_LIB=../toluapp/build/intermediates/binaries/debug/lib/armeabi-v7a/libtoluapp.so",
-                                "-DTINYXML_LIB=../toluapp/build/intermediates/binaries/debug/lib/armeabi-v7a/libtinyxml.so" )
+                                "-DTINYXML_LIB=../tinyxml/build/intermediates/binaries/debug/lib/armeabi-v7a/libtinyxml.so" )
                     }
                 }
             }
@@ -79,7 +80,7 @@ model {
                                 "-DFREETYPE_LIB=../freetype/build/intermediates/binaries/release/lib/armeabi-v7a/libfreetype.so",
                                 "-DLUA_LIB=../lua/build/intermediates/binaries/release/lib/armeabi-v7a/liblua.so",
                                 "-DTOLUAPP_LIB=../toluapp/build/intermediates/binaries/release/lib/armeabi-v7a/libtoluapp.so",
-                                "-DTINYXML_LIB=../toluapp/build/intermediates/binaries/release/lib/armeabi-v7a/libtinyxml.so" )
+                                "-DTINYXML_LIB=../tinyxml/build/intermediates/binaries/release/lib/armeabi-v7a/libtinyxml.so" )
                     }
                 }
             }
